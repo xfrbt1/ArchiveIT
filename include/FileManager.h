@@ -1,0 +1,10 @@
+#ifndef COURSE_PROJECT_FILEMANAGER_H
+#define COURSE_PROJECT_FILEMANAGER_H
+
+
+class FileManager {
+
+};
+
+
+#endif //COURSE_PROJECT_FILEMANAGER_H

@@ -1,0 +1,9 @@
+#ifndef COURSE_PROJECT_COMPRESSOR_H
+#define COURSE_PROJECT_COMPRESSOR_H
+
+
+class Compressor {
+
+};
+
+#endif //COURSE_PROJECT_COMPRESSOR_H

@@ -1,0 +1,5 @@
+/Applications/Development/C_BSUIR/C++_5/ArchiveIT/cmake-build-debug/CMakeFiles/course_project.dir
+/Applications/Development/C_BSUIR/C++_5/ArchiveIT/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Applications/Development/C_BSUIR/C++_5/ArchiveIT/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Applications/Development/C_BSUIR/C++_5/ArchiveIT/cmake-build-debug/CMakeFiles/course_project_autogen_timestamp_deps.dir
+/Applications/Development/C_BSUIR/C++_5/ArchiveIT/cmake-build-debug/CMakeFiles/course_project_autogen.dir
