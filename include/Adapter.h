@@ -35,6 +35,8 @@ public:
 
     void setPath(const std::string &path);
 
+    void setCompressMethod(const std::string &compressMethod);
+
     void createArchive();
 
     void unpackArchive();
@@ -42,30 +44,6 @@ public:
     void updateInfo();
 
     void setBenchmark();
-
-
-//
-//
-//    void remove()
-//    {
-//        std::string filePath = fileManager->getPath();
-//        if (!filePath.empty())
-//        {
-//            fileManager->remove(filePath);
-//        }
-//        else
-//        {
-//            std::cerr << "Ошибка: Путь не установлен.\n";
-//        }
-//    }
-//
-//
-//    std::string getInfo() const
-//    {
-//        std::string filePath = fileManager->getPath();
-//        return fileManager->getFileInfo(filePath);
-//    }
-
 
 };
 
