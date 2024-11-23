@@ -1,0 +1,9 @@
+#ifndef COURSE_PROJECT_ARCHIVATOR_H
+#define COURSE_PROJECT_ARCHIVATOR_H
+
+
+class Archivator {
+
+};
+
+#endif //COURSE_PROJECT_ARCHIVATOR_H

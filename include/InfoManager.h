@@ -1,0 +1,9 @@
+#ifndef COURSE_PROJECT_INFOMANAGER_H
+#define COURSE_PROJECT_INFOMANAGER_H
+
+
+class InfoManager {
+
+};
+
+#endif //COURSE_PROJECT_INFOMANAGER_H
