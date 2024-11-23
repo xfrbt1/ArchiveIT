@@ -5,52 +5,45 @@
 #include "iostream"
 #include "Compressor.h"
 #include "FileManager.h"
-
+#include "Archivator.h"
+#include "InfoManager.h"
 
 class Adapter {
 
 private:
     Compressor * compressor;
     FileManager * fileManager;
-
+    Archivator * archivator;
+    InfoManager * infoManager;
 
 public:
-//    Adapter(Compressor *comp, FileManager *fm)
-//            : compressor(comp), fileManager(fm) {}
-//
-//
-//    void setPath(const std::string &path)
-//    {
-//        fileManager->setPath(path);
-//    }
-//
-//
-//    void compress()
-//    {
-//        std::string filePath = fileManager->getPath(); // Получаем путь
-//        if (fileManager->isFile(filePath))
-//        {
-//            compressor->compressFile(filePath); // Сжимаем файл
-//        }
-//        else if (fileManager->isDirectory(filePath))
-//        {
-//            compressor->compressDirectory(filePath); // Сжимаем каталог
-//        }
-//    }
-//
-//
-//    void decompress()
-//    {
-//        std::string filePath = fileManager->getPath();
-//        if (fileManager->isCompressedFile(filePath))
-//        {
-//            compressor->decompressFile(filePath);
-//        }
-//        else
-//        {
-//            std::cerr << "Ошибка: Невозможно распаковать некорректный файл.\n";
-//        }
-//    }
+    Adapter
+            (
+    Compressor *comp,
+    FileManager *fm,
+    Archivator *arch,
+    InfoManager * im
+            )
+            :
+    compressor(comp),
+    fileManager(fm),
+    archivator(arch),
+    infoManager(im)
+            {}
+
+    ~Adapter();
+
+    void setPath(const std::string &path);
+
+    void createArchive();
+
+    void unpackArchive();
+
+    void updateInfo();
+
+    void setBenchmark();
+
+
 //
 //
 //    void remove()
@@ -72,7 +65,7 @@ public:
 //        std::string filePath = fileManager->getPath();
 //        return fileManager->getFileInfo(filePath);
 //    }
-//
+
 
 };
 

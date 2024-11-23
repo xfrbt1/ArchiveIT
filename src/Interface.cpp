@@ -50,42 +50,52 @@ void Interface::setToolBarFont(QToolBar *toolBar)
 }
 
 
-// Создает кнопки навигации и добавляет их на панель инструментов
+// Устанавливаем шрифт и начальные размеры кнопок в setupNavigationButtons
 void Interface::setupNavigationButtons()
 {
-    // Инициализация кнопок
+    QFont buttonFont;
+    buttonFont.setPointSize(TOOLBAR_FONT); // Задаем размер шрифта для всех кнопок
+
     viewButton = new QToolButton(this);
     viewButton->setText("View");
+    viewButton->setFont(buttonFont);
     connect(viewButton, &QToolButton::clicked, this, &Interface::selectPath);
     toolBar->addWidget(viewButton);
 
     compressButton = new QToolButton(this);
     compressButton->setText("Compress");
-    connect(compressButton, &QToolButton::clicked, this, []() {
+    compressButton->setFont(buttonFont);
+    connect(compressButton, &QToolButton::clicked, this, []()
+    {
         QMessageBox::information(nullptr, "Сжать", "Запущен процесс сжатия!");
     });
     toolBar->addWidget(compressButton);
 
     decompressButton = new QToolButton(this);
     decompressButton->setText("Decompress");
-    connect(decompressButton, &QToolButton::clicked, this, []() {
+    decompressButton->setFont(buttonFont);
+    connect(decompressButton, &QToolButton::clicked, this, []()
+    {
         QMessageBox::information(nullptr, "Распаковать", "Запущен процесс распаковки!");
     });
     toolBar->addWidget(decompressButton);
 
     deleteButton = new QToolButton(this);
     deleteButton->setText("Remove");
-    connect(deleteButton, &QToolButton::clicked, this, []() {
+    deleteButton->setFont(buttonFont);
+    connect(deleteButton, &QToolButton::clicked, this, []()
+    {
         QMessageBox::information(nullptr, "Удалить", "Удаление файла или каталога!");
     });
     toolBar->addWidget(deleteButton);
 
     // Кнопка выбора алгоритма
     setupAlgorithmMenu();
-
     infoButton = new QToolButton(this);
     infoButton->setText("Info");
-    connect(infoButton, &QToolButton::clicked, this, []() {
+    infoButton->setFont(buttonFont);
+    connect(infoButton, &QToolButton::clicked, this, []()
+    {
         QMessageBox::information(nullptr, "Info", "Информация о приложении.");
     });
     toolBar->addWidget(infoButton);
@@ -98,13 +108,19 @@ void Interface::setupAlgorithmMenu()
     QToolButton *algorithmButton = new QToolButton(this);
     algorithmButton->setText("Algorithm");
 
+    // Устанавливаем размер текста кнопки
+    QFont buttonFont = algorithmButton->font();
+    buttonFont.setPointSize(TOOLBAR_FONT);
+    algorithmButton->setFont(buttonFont);
+
     // Создаем меню и добавляем доступные алгоритмы
     QMenu *compressionMenu = new QMenu("Choose Algorithm", this);
     QStringList algorithms = {"LZ77", "LZ78", "HF"};
     for (const QString &alg : algorithms)
     {
         QAction *algorithmAction = compressionMenu->addAction(alg);
-        connect(algorithmAction, &QAction::triggered, this, [this, alg]() {
+        connect(algorithmAction, &QAction::triggered, this, [this, alg]()
+        {
             algorithmMethodLabel->setText("ALGORITHM: " + alg);
         });
     }
@@ -157,7 +173,6 @@ void Interface::selectPath()
     {
         pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
     }
-
     updateButtonStyles();
 }
 
@@ -168,12 +183,13 @@ void Interface::updateButtonStyles()
     // Проверяем, выбран ли путь
     bool pathSelected = !pathLabel->text().isEmpty() && pathLabel->text() != "PATH: ";
 
-    // Устанавливаем стиль для кнопок
-    QString buttonStyle = pathSelected ? "background-color: green; color: white;" : "";
+    // Устанавливаем только цвет фона для активных кнопок
+    QString activeStyle = "background-color: green; color: white;";
+    QString defaultStyle = ""; // Сбрасываем стиль, если путь не выбран
 
-    // Применяем стиль к кнопкам
-    compressButton->setStyleSheet(buttonStyle);
-    decompressButton->setStyleSheet(buttonStyle);
-    deleteButton->setStyleSheet(buttonStyle);
-    infoButton->setStyleSheet(buttonStyle);
+    // Применяем стиль к кнопкам, не трогая шрифт и размер
+    compressButton->setStyleSheet(pathSelected ? activeStyle : defaultStyle);
+    decompressButton->setStyleSheet(pathSelected ? activeStyle : defaultStyle);
+    deleteButton->setStyleSheet(pathSelected ? activeStyle : defaultStyle);
+    infoButton->setStyleSheet(defaultStyle); // Информация всегда доступна
 }
