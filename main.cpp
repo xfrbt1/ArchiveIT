@@ -1,14 +1,23 @@
 #include <QApplication>
 #include "Interface.h"
+#include "Adapter.h"
+
 #define HIGHT 500
 #define WIDHT 350
+#define PROJECT_NAME "ArchiveIT"
+
 
 int main(int argc, char *argv[])
 {
+    FileManager *fileManager = new FileManager();
+    Adapter *adapter = new Adapter(fileManager);
+
     QApplication app(argc, argv);
-    Interface window;
-    window.resize(HIGHT, WIDHT);
-    window.setWindowTitle("Compressor");
-    window.show();
+    Interface *interface  = new Interface(adapter);
+
+    interface->resize(HIGHT, WIDHT);
+    interface->setWindowTitle(PROJECT_NAME);
+    interface->show();
+
     return app.exec();
 }
