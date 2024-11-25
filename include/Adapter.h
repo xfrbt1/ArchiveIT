@@ -6,34 +6,34 @@
 #include "Compressor.h"
 #include "FileManager.h"
 #include "Archivator.h"
-#include "InfoManager.h"
+
 
 class Adapter {
 
 private:
-    Compressor * compressor;
+//    Compressor * compressor;
     FileManager * fileManager;
-    Archivator * archivator;
-    InfoManager * infoManager;
+//    Archivator * archivator;
+//    InfoManager * infoManager;
 
 public:
     Adapter
             (
-    Compressor *comp,
-    FileManager *fm,
-    Archivator *arch,
-    InfoManager * im
+//    Compressor *comp,
+    FileManager *fm
+//    Archivator *arch,
+//    InfoManager * im
             )
             :
-    compressor(comp),
-    fileManager(fm),
-    archivator(arch),
-    infoManager(im)
+//    compressor(comp),
+    fileManager(fm)
+//    archivator(arch),
+//    infoManager(im)
             {}
 
     ~Adapter();
 
-    void setPath(const std::string &path);
+    void updatePath(std::string &path);
 
     void setCompressMethod(const std::string &compressMethod);
 
@@ -41,9 +41,11 @@ public:
 
     void unpackArchive();
 
-    void updateInfo();
+    void setInfo();
 
     void setBenchmark();
+
+    void remove();
 
 };
 

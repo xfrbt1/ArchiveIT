@@ -6,63 +6,29 @@
 #include "fstream"
 #include "filesystem"
 
+#include "../utils/time_to_string.h"
+#include "../utils/bytes_convertor.h"
+
 
 class FileManager {
 
 private:
-
     std::string currentPath;
+    std::string lastModified;
+    bool isRegular;
+    uintmax_t size;
+
 
 public:
-
-    void setPath(const std::string &newPath);
-
-    void getInfo() const;
-
+    int setPath(std::string &newPath);
+    int setPathObjectType();
+    int setSize();
+    int setLastModified();
+    void setInfo();
+    void getInfo();
     void remove();
 
 };
-
-void FileManager::setPath(const std::string &newPath)
-{
-
-}
-
-void FileManager::getInfo() const
-{
-
-}
-
-void FileManager::remove() {
-    if (currentPath.empty())
-    {
-        return;
-    }
-    try
-    {
-        auto path = std::filesystem::path(currentPath);
-
-        if (std::filesystem::exists(path))
-        {
-            if (std::filesystem::is_directory(path))
-            {
-                std::filesystem::remove_all(path);
-            }
-            else
-            {
-                std::filesystem::remove(path);
-            }
-        }
-        else
-        {
-            return;
-        }
-    }
-    catch (const std::exception &ex)
-    {
-        std::cerr << "remove error: " << ex.what() << std::endl;
-    }
-}
 
 
 #endif //COURSE_PROJECT_FILEMANAGER_H
