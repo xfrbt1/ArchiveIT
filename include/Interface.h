@@ -11,12 +11,15 @@
 #include <QFileDialog>
 #include <QMenu>
 
+#include "../include/Adapter.h"
+
+
 class Interface : public QMainWindow
 {
 Q_OBJECT
 
 public:
-    explicit Interface(QWidget *parent = nullptr);
+    explicit Interface(Adapter *adapter, QWidget *parent = nullptr);
     ~Interface();
 
 private:
@@ -40,8 +43,11 @@ private:
     void setupLabels();
     void updateButtonStyles();
 
+    Adapter * adapter;
+
 private slots:
     void selectPath();
+    void removePathObject();
 };
 
 #endif //COURSE_PROJECT_INTERFACE_H

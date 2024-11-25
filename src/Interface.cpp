@@ -3,12 +3,12 @@
 #define TOOLBAR_FONT 14
 
 
-Interface::Interface(QWidget *parent) : QMainWindow(parent)
+Interface::Interface(Adapter *adapter, QWidget *parent)
+: QMainWindow(parent), adapter(adapter)
 {
     // Создаем центральный виджет
     centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
-
     // Инициализация и настройка интерфейса
     setupUI();
 }
@@ -83,10 +83,7 @@ void Interface::setupNavigationButtons()
     deleteButton = new QToolButton(this);
     deleteButton->setText("Remove");
     deleteButton->setFont(buttonFont);
-    connect(deleteButton, &QToolButton::clicked, this, []()
-    {
-        QMessageBox::information(nullptr, "Удалить", "Удаление файла или каталога!");
-    });
+    connect(deleteButton, &QToolButton::clicked, this, &Interface::removePathObject);
     toolBar->addWidget(deleteButton);
 
     // Кнопка выбора алгоритма
@@ -158,6 +155,8 @@ void Interface::selectPath()
         if (!selectedFiles.isEmpty())
         {
             QString selectedPath = selectedFiles.first();
+            std::string new_path = selectedPath.toStdString();
+            adapter->updatePath(new_path);
             if (selectedPath.length() >= 50)
             {
                 selectedPath = selectedPath.mid(0, 50) + "...";
@@ -174,6 +173,14 @@ void Interface::selectPath()
         pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
     }
     updateButtonStyles();
+}
+
+
+void Interface::removePathObject()
+{
+    QMessageBox::information(nullptr, "Remove", "remove selected object.");
+    adapter->remove();
+    pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
 }
 
 
