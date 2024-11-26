@@ -8,10 +8,7 @@ int FileManager::setPath(std::string &newPath)
         currentPath = newPath;
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 
@@ -27,10 +24,7 @@ int FileManager::setPathObjectType()
         isRegular = false;
         return 1;
     }
-    else
-    {
-        return 0;
-    }
+    return 0;
 }
 
 
@@ -39,9 +33,8 @@ int FileManager::setSize()
     if (isRegular)
     {
         size = std::filesystem::file_size(currentPath);
-        return 1;
     }
-    if (!isRegular)
+    else
     {
         uintmax_t totalSize = 0;
         if (std::filesystem::exists(currentPath) && std::filesystem::is_directory(currentPath))
@@ -55,12 +48,8 @@ int FileManager::setSize()
             }
         }
         size = totalSize;
-        return 1;
     }
-    else
-    {
-        return 0;
-    }
+    return 1;
 }
 
 
