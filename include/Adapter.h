@@ -11,7 +11,7 @@
 class Adapter {
 
 private:
-//    Compressor * compressor;
+    Compressor * compressor;
     FileManager * fileManager;
 //    Archivator * archivator;
 //    InfoManager * infoManager;
@@ -19,13 +19,13 @@ private:
 public:
     Adapter
             (
-//    Compressor *comp,
+    Compressor *comp,
     FileManager *fm
 //    Archivator *arch,
 //    InfoManager * im
             )
             :
-//    compressor(comp),
+    compressor(comp),
     fileManager(fm)
 //    archivator(arch),
 //    infoManager(im)

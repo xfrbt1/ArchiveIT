@@ -10,7 +10,8 @@
 int main(int argc, char *argv[])
 {
     FileManager *fileManager = new FileManager();
-    Adapter *adapter = new Adapter(fileManager);
+    Compressor *compressor = new Compressor();
+    Adapter *adapter = new Adapter(compressor, fileManager);
 
     QApplication app(argc, argv);
     Interface *interface  = new Interface(adapter);

@@ -1,5 +1,7 @@
 #include "../include/FileManager.h"
 
+#include "../utils/time_to_string.h"
+#include "../utils/bytes_convertor.h"
 
 int FileManager::setPath(std::string &newPath)
 {
@@ -81,7 +83,7 @@ void FileManager::getInfo()
 {
     std::cout << "path: " << currentPath << std::endl;
     std::cout << "type: " << (isRegular ? "regular" : "directory") << std::endl;
-    std::cout << "size: " << size << std::endl;
+    std::cout << "size: " << bytes_to_str(size) << std::endl;
     std::cout << "lastModified: " << lastModified << std::endl;
 }
 
