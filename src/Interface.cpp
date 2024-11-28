@@ -184,6 +184,18 @@ void Interface::removePathObject()
 }
 
 
+void Interface::Compress()
+{
+    adapter->createArchive();
+}
+
+
+void Interface::Decompress()
+{
+
+}
+
+
 // Обновляет стиль кнопок на панели инструментов
 void Interface::updateButtonStyles()
 {

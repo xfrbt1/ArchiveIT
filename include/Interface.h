@@ -48,6 +48,8 @@ private:
 private slots:
     void selectPath();
     void removePathObject();
+    void Compress();
+    void Decompress();
 };
 
 #endif //COURSE_PROJECT_INTERFACE_H

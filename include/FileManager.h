@@ -6,8 +6,6 @@
 #include "fstream"
 #include "filesystem"
 
-#include "../utils/time_to_string.h"
-#include "../utils/bytes_convertor.h"
 
 
 class FileManager {
@@ -25,7 +23,13 @@ public:
     int setSize();
     int setLastModified();
     void setInfo();
+
+    std::string getPath();
+    std::string getLastModified();
+    bool getIsRegular();
+    uintmax_t getSize();
     void getInfo();
+
     void remove();
 
 };
