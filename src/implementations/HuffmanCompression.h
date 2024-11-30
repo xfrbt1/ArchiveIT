@@ -2,7 +2,7 @@
 #define COURSE_PROJECT_HUFFMANCOMPRESSION_H
 
 #include "iostream"
-#include "../utils/structures/HuffmanNode.h"
+#include "../../utils/structures/HuffmanNode.h"
 
 
 std::unordered_map<char, size_t> buildFrequencyTable(const std::string &inputData)

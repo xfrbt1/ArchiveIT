@@ -26,6 +26,7 @@ public:
 
     std::string getPath();
     std::string getLastModified();
+    std::string getFileExtension();
     bool getIsRegular();
     uintmax_t getSize();
     void getInfo();

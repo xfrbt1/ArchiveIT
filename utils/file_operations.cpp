@@ -45,6 +45,14 @@ void writeFile(const std::string &outputPath, const std::string &data)
 }
 
 
+std::string getExtension(const std::string &path)
+{
+    size_t dotPos = path.rfind('.');
+    std::string originalExtension = (dotPos != std::string::npos) ? path.substr(dotPos) : "";
+    return originalExtension;
+}
+
+
 std::string changeExtension(const std::string &path, const std::string &newExtension)
 {
     std::filesystem::path pathObj(path);

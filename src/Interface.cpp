@@ -1,4 +1,5 @@
-#include "../include/Interface.h"
+#include "Interface.h"
+
 
 #define TOOLBAR_FONT 14
 
@@ -71,10 +72,7 @@ void Interface::setupNavigationButtons()
     decompressButton = new QToolButton(this);
     decompressButton->setText("Decompress");
     decompressButton->setFont(buttonFont);
-    connect(decompressButton, &QToolButton::clicked, this, []()
-    {
-        QMessageBox::information(nullptr, "Распаковать", "Запущен процесс распаковки!");
-    });
+    connect(decompressButton, &QToolButton::clicked, this, &Interface::Decompress);
     toolBar->addWidget(decompressButton);
 
     deleteButton = new QToolButton(this);
