@@ -119,3 +119,15 @@ void FileManager::remove()
         std::cout << "remove error: " << e.what() << std::endl;
     }
 }
+
+
+bool FileManager::getIsRegular() {return isRegular;}
+
+
+std::string FileManager::getLastModified() {return lastModified;}
+
+
+std::string FileManager::getPath() {return currentPath;}
+
+
+uintmax_t FileManager::getSize() {return size;}

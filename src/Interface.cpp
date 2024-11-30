@@ -65,10 +65,7 @@ void Interface::setupNavigationButtons()
     compressButton = new QToolButton(this);
     compressButton->setText("Compress");
     compressButton->setFont(buttonFont);
-    connect(compressButton, &QToolButton::clicked, this, []()
-    {
-        QMessageBox::information(nullptr, "Сжать", "Запущен процесс сжатия!");
-    });
+    connect(compressButton, &QToolButton::clicked, this, &Interface::Compress);
     toolBar->addWidget(compressButton);
 
     decompressButton = new QToolButton(this);
@@ -192,7 +189,7 @@ void Interface::Compress()
 
 void Interface::Decompress()
 {
-
+    adapter->unpackArchive();
 }
 
 
