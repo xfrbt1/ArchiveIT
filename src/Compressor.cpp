@@ -1,11 +1,8 @@
 #include <iostream>
-#include <fstream>
-#include <queue>
-#include <unordered_map>
-#include <vector>
 #include <memory>
 
-#include "../utils/file_op.h"
+
+#include "../utils/file_operations.h"
 #include "../utils/implementations/HuffmanCompression.h"
 
 #include "Compressor.h"
@@ -20,13 +17,15 @@ void Compressor::compressHuffman(const std::string &file_path, const std::string
         auto huffmanTree = buildHuffmanTree(frequencyTable);
         auto huffmanCodes = generateHuffmanCodes(huffmanTree);
         std::string compressedData = compressData(inputData, huffmanCodes);
+
         std::ofstream outputFile(output_path, std::ios::binary);
         if (!outputFile)
         {
-            throw std::ios_base::failure("Failed to open output file: " + output_path);
+            throw std::ios_base::failure("Failed to open output file.");
         }
         serializeFrequencyTable(outputFile, frequencyTable);
-        outputFile << compressedData;
+        serializeTree(outputFile, huffmanTree);
+        writeBits(outputFile, compressedData);
         std::cout << "Compression successful. Compressed file written to " << output_path << std::endl;
     }
     catch (const std::exception &e)
@@ -35,6 +34,7 @@ void Compressor::compressHuffman(const std::string &file_path, const std::string
     }
 }
 
+
 void Compressor::decompressHuffman(const std::string &file_path, const std::string &output_path)
 {
     try
@@ -42,14 +42,25 @@ void Compressor::decompressHuffman(const std::string &file_path, const std::stri
         std::ifstream inputFile(file_path, std::ios::binary);
         if (!inputFile)
         {
-            throw std::ios_base::failure("Failed to open file for decompression: " + file_path);
+            throw std::ios_base::failure("Failed to open input file.");
         }
+
         auto frequencyTable = deserializeFrequencyTable(inputFile);
-        auto huffmanTree = rebuildHuffmanTree(frequencyTable);
+        auto huffmanTree = deserializeTree(inputFile);
+
         std::string compressedData;
-        inputFile >> compressedData;
+        char byte;
+        while (inputFile.get(byte))
+        {
+            for (int i = 7; i >= 0; --i)
+            {
+                compressedData += ((byte >> i) & 1) ? '1' : '0';
+            }
+        }
+
         std::string decompressedData = decompressData(compressedData, huffmanTree);
         writeFile(output_path, decompressedData);
+
         std::cout << "Decompression successful. Decompressed file written to " << output_path << std::endl;
     }
     catch (const std::exception &e)

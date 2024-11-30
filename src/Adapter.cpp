@@ -1,4 +1,5 @@
 #include "../include/Adapter.h"
+#include "../utils/file_operations.h"
 
 
 void Adapter::updatePath(std::string &path)
@@ -20,7 +21,7 @@ void Adapter::createArchive()
     std::string current_path = fileManager->getPath();
     if (fileManager->getIsRegular())
     {
-        compressor->compressHuffman(current_path, "");
+        compressor->compressHuffman(current_path, changeExtension(current_path, ".huff"));
     }
 }
 
