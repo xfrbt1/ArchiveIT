@@ -1,7 +1,10 @@
-#include "../include/FileManager.h"
+#include "FileManager.h"
+
 
 #include "../utils/time_to_string.h"
 #include "../utils/bytes_convertor.h"
+#include "../utils/file_operations.h"
+
 
 int FileManager::setPath(std::string &newPath)
 {
@@ -131,3 +134,6 @@ std::string FileManager::getPath() {return currentPath;}
 
 
 uintmax_t FileManager::getSize() {return size;}
+
+
+std::string FileManager::getFileExtension() {return getExtension(currentPath);}
