@@ -172,6 +172,7 @@ void Interface::removePathObject()
 {
     adapter->remove();
     pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
+    updateButtonStyles();
 }
 
 
