@@ -100,28 +100,25 @@ void Interface::setupAlgorithmMenu()
     QToolButton *algorithmButton = new QToolButton(this);
     algorithmButton->setText("Algorithm");
 
-    // Устанавливаем размер текста кнопки
     QFont buttonFont = algorithmButton->font();
     buttonFont.setPointSize(TOOLBAR_FONT);
     algorithmButton->setFont(buttonFont);
 
-    // Создаем меню и добавляем доступные алгоритмы
     QMenu *compressionMenu = new QMenu("Choose Algorithm", this);
-    QStringList algorithms = {"LZ77", "LZ78", "HF"};
+    QStringList algorithms = {"huff", "lz77", "lz78"};
     for (const QString &alg : algorithms)
     {
         QAction *algorithmAction = compressionMenu->addAction(alg);
         connect(algorithmAction, &QAction::triggered, this, [this, alg]()
         {
             algorithmMethodLabel->setText("ALGORITHM: " + alg);
+            adapter->setCompressMethod(alg.toStdString());
         });
     }
 
-    // Настройка меню для кнопки
     algorithmButton->setMenu(compressionMenu);
     algorithmButton->setPopupMode(QToolButton::InstantPopup);
 
-    // Вставляем кнопку с меню на панель инструментов перед кнопкой "Info"
     toolBar->addWidget(algorithmButton);
 }
 
@@ -173,7 +170,6 @@ void Interface::selectPath()
 
 void Interface::removePathObject()
 {
-    QMessageBox::information(nullptr, "Remove", "remove selected object.");
     adapter->remove();
     pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
 }

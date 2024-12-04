@@ -17,4 +17,7 @@ std::string getExtension(const std::string &path);
 std::string changeExtension(const std::string &filePath, const std::string &newExtension);
 
 
+std::string generateOutputFilePath(const std::string &inputFilePath, const std::string &suffix, const std::string &newExtension);
+
+
 #endif //COURSE_PROJECT_FILE_OPERATIONS_H

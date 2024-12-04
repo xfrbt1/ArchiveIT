@@ -17,7 +17,6 @@ private:
 public:
     Adapter (FileManager *fm, Compressor *comp): fileManager(fm), compressor(comp)
     {
-        //
     }
 
     ~Adapter();

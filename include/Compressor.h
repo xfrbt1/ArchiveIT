@@ -4,9 +4,15 @@
 
 class Compressor {
 
+private:
+    std::string compressionMethod;
+
 public:
     Compressor() = default;
     ~Compressor() = default;
+
+    void setCompressMethod(const std::string &compressMethod) {compressionMethod = compressMethod;}
+    std::string getCompressMethod() {return compressionMethod;}
 
     void compressHuffman(const std::string &file_path, const std::string &output_path);
     void compressLZ77(const std::string &file_path, const std::string &output_path);
