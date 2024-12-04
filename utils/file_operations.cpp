@@ -59,3 +59,15 @@ std::string changeExtension(const std::string &path, const std::string &newExten
     pathObj.replace_extension(newExtension);
     return pathObj.string();
 }
+
+
+std::string generateOutputFilePath(const std::string &inputFilePath, const std::string &suffix, const std::string &newExtension = "")
+{
+    size_t lastSlashPos = inputFilePath.find_last_of("/\\");
+    std::string directory = (lastSlashPos != std::string::npos) ? inputFilePath.substr(0, lastSlashPos + 1) : "";
+    std::string baseName = (lastSlashPos != std::string::npos) ? inputFilePath.substr(lastSlashPos + 1) : inputFilePath;
+    size_t dotPos = baseName.find_last_of('.');
+    std::string outputBaseName = (dotPos != std::string::npos) ? baseName.substr(0, dotPos) : baseName;
+    std::string extension = (dotPos != std::string::npos) ? baseName.substr(dotPos) : "";
+    return directory + outputBaseName + suffix + (newExtension.empty() ? extension : newExtension);
+}
