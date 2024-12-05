@@ -1,6 +1,5 @@
 #include "../utils/file_operations.h"
 
-
 #include "Adapter.h"
 
 
@@ -45,28 +44,43 @@ void Adapter::createArchive()
     }
     else
     {
-
+        if (compressor->getCompressMethod() == "huff")
+        {
+            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "huff");
+        }
+        if (compressor->getCompressMethod() == "lz77")
+        {
+            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz77");
+        }
+        if (compressor->getCompressMethod() == "lz78")
+        {
+            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz78");
+        }
     }
 }
 
 
-void Adapter::unpackArchive() {
+void Adapter::unpackArchive()
+{
     std::string current_path = fileManager->getPath();
     if (fileManager->getIsRegular())
     {
-        if (fileManager->getFileExtension() == ".huff") {
+        if (fileManager->getFileExtension() == ".huff")
+        {
             compressor->decompressHuffman(current_path);
         }
-        if (fileManager->getFileExtension() == ".lz77") {
+        if (fileManager->getFileExtension() == ".lz77")
+        {
             compressor->decompressLZ77(current_path);
         }
-        if (fileManager->getFileExtension() == ".lz78") {
+        if (fileManager->getFileExtension() == ".lz78")
+        {
             compressor->decompressLZ78(current_path);
         }
-    }
-    else
-    {
-
+        if (fileManager->getFileExtension() == ".arc")
+        {
+            archivator->decompressArchive(current_path);
+        }
     }
 }
 

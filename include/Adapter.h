@@ -12,10 +12,11 @@ class Adapter {
 
 private:
     Compressor * compressor;
+    Archivator * archivator;
     FileManager * fileManager;
 
 public:
-    Adapter (FileManager *fm, Compressor *comp): fileManager(fm), compressor(comp)
+    Adapter (FileManager *fm, Archivator *arch, Compressor *comp): fileManager(fm), archivator(arch), compressor(comp)
     {
     }
 
