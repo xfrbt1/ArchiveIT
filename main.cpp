@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     FileManager *fileManager = new FileManager();
     Compressor *compressor = new Compressor();
-    Archivator *archivator = new Archivator(compressor);
+    Archiver *archivator = new Archiver(compressor);
     Adapter *adapter = new Adapter(fileManager, archivator, compressor);
 
     QApplication app(argc, argv);

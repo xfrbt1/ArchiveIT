@@ -20,8 +20,8 @@ add_executable(
         include/Adapter.h
         include/FileManager.h
         include/Compressor.h
-        include/Archivator.h
-        src/Archivator.cpp
+        include/Archiver.h
+        src/Archiver.cpp
         include/Logger.h
         src/Logger.cpp
         include/Benchmark.h

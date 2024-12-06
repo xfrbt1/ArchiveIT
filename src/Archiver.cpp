@@ -4,10 +4,10 @@
 
 #include "../utils/file_operations.h"
 
-#include "Archivator.h"
+#include "Archiver.h"
 
 
-void Archivator::compressDirectory(const std::string &directoryPath, const std::string &archivePath, const std::string &compressionMethod)
+void Archiver::compressDirectory(const std::string &directoryPath, const std::string &archivePath, const std::string &compressionMethod)
 {
     try
     {
@@ -80,7 +80,7 @@ void Archivator::compressDirectory(const std::string &directoryPath, const std::
     }
 }
 
-void Archivator::decompressArchive(const std::string &archivePath)
+void Archiver::decompressArchive(const std::string &archivePath)
 {
     try
     {

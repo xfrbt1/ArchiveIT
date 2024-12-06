@@ -1,4 +1,10 @@
 #ifndef COURSE_PROJECT_BENCHMARK_CPP
 #define COURSE_PROJECT_BENCHMARK_H
 
+
+class Benchmark
+{
+
+};
+
 #endif //COURSE_PROJECT_BENCHMARK_CPP

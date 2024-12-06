@@ -46,15 +46,15 @@ void Adapter::createArchive()
     {
         if (compressor->getCompressMethod() == "huff")
         {
-            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "huff");
+            archiver->compressDirectory(current_path, changeExtension(current_path, ".arc"), "huff");
         }
         if (compressor->getCompressMethod() == "lz77")
         {
-            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz77");
+            archiver->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz77");
         }
         if (compressor->getCompressMethod() == "lz78")
         {
-            archivator->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz78");
+            archiver->compressDirectory(current_path, changeExtension(current_path, ".arc"), "lz78");
         }
     }
 }
@@ -79,7 +79,7 @@ void Adapter::unpackArchive()
         }
         if (fileManager->getFileExtension() == ".arc")
         {
-            archivator->decompressArchive(current_path);
+            archiver->decompressArchive(current_path);
         }
     }
 }
