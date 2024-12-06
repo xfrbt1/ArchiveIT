@@ -4,19 +4,21 @@
 
 #include "iostream"
 #include "FileManager.h"
+#include "Benchmark.h"
 #include "Compressor.h"
-#include "Archivator.h"
+#include "Archiver.h"
 
 
 class Adapter {
 
 private:
     Compressor * compressor;
-    Archivator * archivator;
+    Archiver * archiver;
     FileManager * fileManager;
+    Benchmark * benchmark = nullptr;
 
 public:
-    Adapter (FileManager *fm, Archivator *arch, Compressor *comp): fileManager(fm), archivator(arch), compressor(comp)
+    Adapter (FileManager *fm, Archiver *arch, Compressor *comp): fileManager(fm), archiver(arch), compressor(comp)
     {
     }
 
@@ -26,8 +28,6 @@ public:
     void setCompressMethod(const std::string &compressMethod);
     void createArchive();
     void unpackArchive();
-    void setInfo();
-    void setBenchmark();
     void remove();
 };
 
