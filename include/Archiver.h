@@ -1,19 +1,11 @@
 #ifndef COURSE_PROJECT_ARCHIVER_H
 #define COURSE_PROJECT_ARCHIVER_H
 
-
 #include "iostream"
 #include "fstream"
 #include "filesystem"
 
 #include "Compressor.h"
-
-
-struct FileMeta {
-    std::string relativePath;
-    size_t originalSize;
-    std::string algorithm;
-};
 
 
 class Archiver {

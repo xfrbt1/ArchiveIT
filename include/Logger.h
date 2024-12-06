@@ -1,4 +1,9 @@
 #ifndef COURSE_PROJECT_LOGGER_H
 #define COURSE_PROJECT_LOGGER_H
 
+
+class Logger {
+
+};
+
 #endif //COURSE_PROJECT_LOGGER_H
