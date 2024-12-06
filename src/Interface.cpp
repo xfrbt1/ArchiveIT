@@ -2,6 +2,9 @@
 
 
 #define TOOLBAR_FONT 14
+#define HIGHT 500
+#define WIDHT 350
+#define PROJECT_NAME "ArchiveIT"
 
 
 Interface::Interface(Adapter *adapter, QWidget *parent)
@@ -12,6 +15,8 @@ Interface::Interface(Adapter *adapter, QWidget *parent)
     setCentralWidget(centralWidget);
     // Инициализация и настройка интерфейса
     setupUI();
+    resize(HIGHT, WIDHT);
+    setWindowTitle(PROJECT_NAME);
 }
 
 

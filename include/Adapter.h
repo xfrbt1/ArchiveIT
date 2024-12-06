@@ -7,6 +7,7 @@
 #include "Benchmark.h"
 #include "Compressor.h"
 #include "Archiver.h"
+#include "Logger.h"
 
 
 class Adapter {
@@ -16,6 +17,7 @@ private:
     Archiver * archiver;
     FileManager * fileManager;
     Benchmark * benchmark = nullptr;
+    Logger * logger = nullptr;
 
 public:
     Adapter (FileManager *fm, Archiver *arch, Compressor *comp): fileManager(fm), archiver(arch), compressor(comp)
