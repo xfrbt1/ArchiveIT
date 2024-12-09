@@ -1,0 +1,107 @@
+@startuml
+
+class Interface {
+    - QWidget *centralWidget
+    - QToolBar *toolBar
+    - QToolButton *viewButton
+    - QToolButton *compressButton
+    - QToolButton *decompressButton
+    - QToolButton *deleteButton
+    - QToolButton *infoButton
+    - QLabel *pathLabel
+    - QLabel *algorithmMethodLabel
+    - Adapter *adapter
+
+    + Interface(Adapter *adapter, QWidget *parent = nullptr)
+    + ~Interface()
+    + void setupUI()
+    + void setToolBarFont(QToolBar *toolBar)
+    + void setupNavigationButtons()
+    + void setupAlgorithmMenu()
+    + void setupLabels()
+    + void updateButtonStyles()
+    + void selectPath()
+    + void removePathObject()
+    + void Compress()
+    + void Decompress()
+}
+
+
+Interface --|> QMainWindow : inherits from
+Interface --> Adapter : depends on
+
+
+class Adapter {
+    - Compressor * compressor
+    - Archiver * archiver
+    - FileManager * fileManager
+    - Benchmark * benchmark = nullptr
+    - Logger * logger = nullptr
+
+    + Adapter(FileManager *fm, Archiver *arch, Compressor *comp)
+    + ~Adapter()
+    + void updatePath(std::string &path)
+    + void setCompressMethod(const std::string &compressMethod)
+    + void createArchive()
+    + void unpackArchive()
+    + void remove()
+}
+
+
+Adapter --> Compressor : depends on
+Adapter --> Archiver : depends on
+Adapter --> FileManager : depends on
+Adapter --> Logger : depends on
+Adapter --> Benchmark : depends on
+
+
+class FileManager {
+    - std::string currentPath
+    - std::string lastModified
+    - bool isRegular
+    - uintmax_t size
+
+    + int setPath(std::string &newPath)
+    + int setPathObjectType()
+    + int setSize()
+    + int setLastModified()
+    + void setInfo()
+    + std::string getPath()
+    + std::string getLastModified()
+    + std::string getFileExtension()
+    + bool getIsRegular()
+    + uintmax_t getSize()
+    + void getInfo()
+    + void remove()
+}
+
+
+class Compressor {
+    - std::string compressionMethod
+
+    + Compressor()
+    + ~Compressor()
+    + void setCompressMethod(const std::string &compressMethod)
+    + std::string getCompressMethod()
+    + void compressHuffman(const std::string &file_path, const std::string &output_path)
+    + void compressLZ77(const std::string &file_path, const std::string &output_path)
+    + void compressLZ78(const std::string &file_path, const std::string &output_path)
+    + void decompressHuffman(const std::string &file_path)
+    + void decompressLZ77(const std::string &file_path)
+    + void decompressLZ78(const std::string &file_path)
+}
+
+
+class Archiver {
+    - Compressor *compressor
+
+    + Archiver(Compressor *comp)
+    + void compressDirectory(const std::string &directoryPath, const std::string &archivePath, const std::string &algMethod)
+    + void decompressArchive(const std::string &archivePath)
+}
+
+
+Archiver --> Compressor : depends on
+
+
+@enduml
