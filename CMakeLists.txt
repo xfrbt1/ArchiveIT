@@ -28,7 +28,7 @@ add_executable(
         src/Benchmark.cpp
         utils/bytes_convertor.h
         utils/time_to_string.h
-        utils/structures/HuffmanNode.h src/implementations/HuffmanCompression.h utils/file_operations.cpp utils/file_operations.h src/implementations/LZ77Compression.h src/implementations/LZ78Comprassion.h)
+        utils/structures/HuffmanNode.h src/implementations/HuffmanCompression.h utils/file_operations.cpp utils/file_operations.h)
 
 include_directories(include)
 
