@@ -35,25 +35,7 @@ int FileManager::setPathObjectType()
 
 int FileManager::setSize()
 {
-    if (isRegular)
-    {
-        size = std::filesystem::file_size(currentPath);
-    }
-    else
-    {
-        uintmax_t totalSize = 0;
-        if (std::filesystem::exists(currentPath) && std::filesystem::is_directory(currentPath))
-        {
-            for (const auto& entry : std::filesystem::recursive_directory_iterator(currentPath))
-            {
-                if (std::filesystem::is_regular_file(entry.path()))
-                {
-                    totalSize += std::filesystem::file_size(entry.path());
-                }
-            }
-        }
-        size = totalSize;
-    }
+    size = getFileSize(currentPath);
     return 1;
 }
 
@@ -87,7 +69,6 @@ void FileManager::getInfo()
     std::cout << "path: " << currentPath << std::endl;
     std::cout << "type: " << (isRegular ? "regular" : "directory") << std::endl;
     std::cout << "size: " << bytes_to_str(size) << std::endl;
-//    std::cout << "lastModified: " << lastModified << std::endl;
 }
 
 
@@ -135,5 +116,9 @@ std::string FileManager::getPath() {return currentPath;}
 
 uintmax_t FileManager::getSize() {return size;}
 
+uintmax_t FileManager::getSize(std::string &filePath)
+{
+    return getFileSize(filePath);
+}
 
 std::string FileManager::getFileExtension() {return getExtension(currentPath);}

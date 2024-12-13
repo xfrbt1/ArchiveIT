@@ -20,4 +20,6 @@ std::string changeExtension(const std::string &filePath, const std::string &newE
 std::string generateOutputFilePath(const std::string &inputFilePath, const std::string &suffix, const std::string &newExtension);
 
 
+uintmax_t getFileSize(std::string &filePath);
+
 #endif //COURSE_PROJECT_FILE_OPERATIONS_H

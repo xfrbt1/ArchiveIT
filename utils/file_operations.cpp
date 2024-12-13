@@ -71,3 +71,27 @@ std::string generateOutputFilePath(const std::string &inputFilePath, const std::
     std::string extension = (dotPos != std::string::npos) ? baseName.substr(dotPos) : "";
     return directory + outputBaseName + suffix + (newExtension.empty() ? extension : newExtension);
 }
+
+
+uintmax_t getFileSize(std::string &filePath)
+{
+    uintmax_t size = 0;
+    if (std::filesystem::is_regular_file(filePath))
+    {
+        size = std::filesystem::file_size(filePath);
+    }
+    else
+    {
+        if (std::filesystem::exists(filePath) && std::filesystem::is_directory(filePath))
+        {
+            for (const auto& entry : std::filesystem::recursive_directory_iterator(filePath))
+            {
+                if (std::filesystem::is_regular_file(entry.path()))
+                {
+                    size += std::filesystem::file_size(entry.path());
+                }
+            }
+        }
+    }
+    return size;
+}

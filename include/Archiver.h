@@ -14,7 +14,7 @@ private:
     Compressor *compressor;
 
 public:
-    explicit Archiver(Compressor *comp) : compressor(comp) {}
+    Archiver(Compressor *comp) : compressor(comp) {}
 
     void compressDirectory(const std::string &directoryPath, const std::string &archivePath, const std::string &algMethod);
     void decompressArchive(const std::string &archivePath);
