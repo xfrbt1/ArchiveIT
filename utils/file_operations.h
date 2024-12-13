@@ -22,4 +22,5 @@ std::string generateOutputFilePath(const std::string &inputFilePath, const std::
 
 uintmax_t getFileSize(std::string &filePath);
 
+
 #endif //COURSE_PROJECT_FILE_OPERATIONS_H
