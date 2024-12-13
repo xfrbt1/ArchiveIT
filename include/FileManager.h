@@ -28,6 +28,7 @@ public:
     std::string getFileExtension();
     bool getIsRegular();
     uintmax_t getSize();
+    uintmax_t getSize(std::string &filePath);
     void getInfo();
 
     void remove();

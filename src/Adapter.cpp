@@ -83,5 +83,3 @@ void Adapter::unpackArchive()
         }
     }
 }
-
-

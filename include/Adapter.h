@@ -23,9 +23,7 @@ public:
     Adapter (FileManager *fm, Archiver *arch, Compressor *comp): fileManager(fm), archiver(arch), compressor(comp)
     {
     }
-
-    ~Adapter();
-
+    
     void updatePath(std::string &path);
     void setCompressMethod(const std::string &compressMethod);
     void createArchive();

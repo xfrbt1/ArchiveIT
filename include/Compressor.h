@@ -8,9 +8,6 @@ private:
     std::string compressionMethod;
 
 public:
-    Compressor() = default;
-    ~Compressor() = default;
-
     void setCompressMethod(const std::string &compressMethod) {compressionMethod = compressMethod;}
     std::string getCompressMethod() {return compressionMethod;}
 
