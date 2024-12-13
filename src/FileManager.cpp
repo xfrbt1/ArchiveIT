@@ -116,9 +116,8 @@ std::string FileManager::getPath() {return currentPath;}
 
 uintmax_t FileManager::getSize() {return size;}
 
-uintmax_t FileManager::getSize(std::string &filePath)
-{
-    return getFileSize(filePath);
-}
+
+uintmax_t FileManager::getSize(std::string &filePath) {return getFileSize(filePath);}
+
 
 std::string FileManager::getFileExtension() {return getExtension(currentPath);}
