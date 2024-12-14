@@ -23,6 +23,18 @@ void Adapter::remove()
 }
 
 
+std::string Adapter::getStat()
+{
+    return benchmark->getPrevStat();
+}
+
+
+std::string Adapter::getLastOPath()
+{
+    return benchmark->getLastOperationPair().output;
+}
+
+
 void Adapter::compress(const std::string &i, const std::string &o, const std::string &method)
 {
     if (method == "huff")
@@ -54,6 +66,11 @@ void Adapter::createArchive()
     std::string method = compressor->getCompressMethod();
 
     auto it = method_to_extension.find(method);
+    if (it == method_to_extension.end())
+    {
+        std::cout << "No method choosing!";
+        return;
+    }
 
     std::string extension = it->second;
     std::string output_path = changeExtension(current_path, extension);
@@ -70,12 +87,9 @@ void Adapter::createArchive()
             archiver->compressDirectory(current_path, output_path, method);
         }
         benchmark->setValues(current_path, output_path);
-        std::string stat = benchmark->getPrevStat();
-        std::cout << "next!\n";
     }
     catch (const std::exception &e)
     {
-        std::cout << "unexpected err!\n";
     }
 
 }
@@ -83,36 +97,20 @@ void Adapter::createArchive()
 void Adapter::unpackArchive()
 {
     std::string current_path = fileManager->getPath();
-    if (fileManager->getIsRegular())
+    if (fileManager->getFileExtension() == ".huff")
     {
-        if (fileManager->getFileExtension() == ".huff")
-        {
-            compressor->decompressHuffman(current_path);
-        }
-        if (fileManager->getFileExtension() == ".lz77")
-        {
-            compressor->decompressLZ77(current_path);
-        }
-        if (fileManager->getFileExtension() == ".lz78")
-        {
-            compressor->decompressLZ78(current_path);
-        }
-        if (fileManager->getFileExtension() == ".arc")
-        {
-            archiver->decompressArchive(current_path);
-        }
+        compressor->decompressHuffman(current_path);
+    }
+    if (fileManager->getFileExtension() == ".lz77")
+    {
+        compressor->decompressLZ77(current_path);
+    }
+    if (fileManager->getFileExtension() == ".lz78")
+    {
+        compressor->decompressLZ78(current_path);
+    }
+    if (fileManager->getFileExtension() == ".arc")
+    {
+        archiver->decompressArchive(current_path);
     }
 }
-
-
-std::string Adapter::getStat()
-{
-    return benchmark->getPrevStat();
-}
-
-
-std::string Adapter::getCompressedPath()
-{
-    return benchmark->getLastOperationPair().output;
-}
-
