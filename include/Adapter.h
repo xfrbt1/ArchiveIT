@@ -17,15 +17,15 @@ private:
     Archiver * archiver;
     FileManager * fileManager;
     Benchmark * benchmark;
-    Logger * logger = nullptr;
+    Logger * logger;
 
 public:
-    Adapter (FileManager *fm, Archiver *arch, Compressor *comp, Benchmark *bm): fileManager(fm), archiver(arch), compressor(comp), benchmark(bm)
+    Adapter (FileManager *fm, Archiver *arch, Compressor *comp, Benchmark *bm, Logger *log): fileManager(fm), archiver(arch), compressor(comp), benchmark(bm), logger(log)
     {
     }
 
     std::string getStat();
-    std::string getCompressedPath();
+    std::string getLastOPath();
     void updatePath(std::string &path);
     void setCompressMethod(const std::string &compressMethod);
     void compress(const std::string &i, const std::string &o, const std::string &method);
