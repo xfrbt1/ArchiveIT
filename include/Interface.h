@@ -33,7 +33,8 @@ private:
     QToolButton *deleteButton;
     QToolButton *infoButton;
 
-    QLabel *pathLabel;
+    QLabel *inputPathLabel;
+    QLabel *outputPathLabel;
     QLabel *algorithmMethodLabel;
 
     void setupUI();
@@ -46,6 +47,7 @@ private:
     Adapter * adapter;
 
 private slots:
+    void getInfo();
     void selectPath();
     void removePathObject();
     void Compress();
