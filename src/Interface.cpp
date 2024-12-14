@@ -2,8 +2,13 @@
 
 
 #define TOOLBAR_FONT 14
-#define HIGHT 500
-#define WIDHT 350
+#define HIGHT 150
+#define WIDHT 500
+
+#define IPATH "Input: "
+#define OPATH "Output: "
+#define ALG "Algorithm: "
+
 #define PROJECT_NAME "ArchiveIT"
 
 
@@ -15,7 +20,7 @@ Interface::Interface(Adapter *adapter, QWidget *parent)
     setCentralWidget(centralWidget);
     // Инициализация и настройка интерфейса
     setupUI();
-    resize(HIGHT, WIDHT);
+    resize(WIDHT, HIGHT);
     setWindowTitle(PROJECT_NAME);
 }
 
@@ -41,7 +46,8 @@ void Interface::setupUI()
     // Основной вертикальный макет для центрального виджета
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
     layout->addWidget(toolBar);           // Навигационная панель
-    layout->addWidget(pathLabel);         // Метка пути
+    layout->addWidget(inputPathLabel);         // Метка пути
+    layout->addWidget(outputPathLabel);         // Метка пути
     layout->addWidget(algorithmMethodLabel); // Метка алгоритма
     layout->addStretch();
 }
@@ -91,10 +97,7 @@ void Interface::setupNavigationButtons()
     infoButton = new QToolButton(this);
     infoButton->setText("Info");
     infoButton->setFont(buttonFont);
-    connect(infoButton, &QToolButton::clicked, this, []()
-    {
-        QMessageBox::information(nullptr, "Info", "Информация о приложении.");
-    });
+    connect(infoButton, &QToolButton::clicked, this, &Interface::getInfo);
     toolBar->addWidget(infoButton);
 }
 
@@ -116,7 +119,7 @@ void Interface::setupAlgorithmMenu()
         QAction *algorithmAction = compressionMenu->addAction(alg);
         connect(algorithmAction, &QAction::triggered, this, [this, alg]()
         {
-            algorithmMethodLabel->setText("ALGORITHM: " + alg);
+            algorithmMethodLabel->setText(ALG + alg);
             adapter->setCompressMethod(alg.toStdString());
         });
     }
@@ -131,10 +134,13 @@ void Interface::setupAlgorithmMenu()
 // Устанавливает метки пути и выбранного алгоритма
 void Interface::setupLabels()
 {
-    pathLabel = new QLabel("PATH: ", this);
-    pathLabel->setAlignment(Qt::AlignLeft);
+    inputPathLabel = new QLabel(IPATH, this);
+    inputPathLabel->setAlignment(Qt::AlignLeft);
 
-    algorithmMethodLabel = new QLabel("ALGORITHM: ", this);
+    outputPathLabel = new QLabel(OPATH, this);
+    inputPathLabel->setAlignment(Qt::AlignLeft);
+
+    algorithmMethodLabel = new QLabel(ALG, this);
     algorithmMethodLabel->setAlignment(Qt::AlignLeft);
 }
 
@@ -154,20 +160,20 @@ void Interface::selectPath()
             QString selectedPath = selectedFiles.first();
             std::string new_path = selectedPath.toStdString();
             adapter->updatePath(new_path);
-            if (selectedPath.length() >= 50)
+            if (selectedPath.length() >= 80)
             {
-                selectedPath = selectedPath.mid(0, 50) + "...";
+                selectedPath = selectedPath.mid(0, 80) + "...";
             }
-            pathLabel->setText("PATH: " + selectedPath);
+            inputPathLabel->setText(IPATH + selectedPath);
         }
         else
         {
-            pathLabel->setText("PATH: "); // Очищаем путь, если ничего не выбрано
+            inputPathLabel->setText(IPATH); // Очищаем путь, если ничего не выбрано
         }
     }
     else
     {
-        pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
+        inputPathLabel->setText(IPATH); // Очищаем путь, если диалог был отменен
     }
     updateButtonStyles();
 }
@@ -176,7 +182,7 @@ void Interface::selectPath()
 void Interface::removePathObject()
 {
     adapter->remove();
-    pathLabel->setText("PATH: "); // Очищаем путь, если диалог был отменен
+    inputPathLabel->setText(IPATH); // Очищаем путь, если диалог был отменен
     updateButtonStyles();
 }
 
@@ -184,12 +190,21 @@ void Interface::removePathObject()
 void Interface::Compress()
 {
     adapter->createArchive();
+    //
+    std::string output_path = adapter->getLastOPath();
+    outputPathLabel->setText(QString::fromStdString(OPATH + output_path));
+    //
+    std::string stat = adapter->getStat();
 }
 
 
 void Interface::Decompress()
 {
     adapter->unpackArchive();
+    //
+//    std::string output_path = adapter->getLastOPath();
+//    outputPathLabel->setText(QString::fromStdString(OPATH + output_path));
+    //
 }
 
 
@@ -197,7 +212,7 @@ void Interface::Decompress()
 void Interface::updateButtonStyles()
 {
     // Проверяем, выбран ли путь
-    bool pathSelected = !pathLabel->text().isEmpty() && pathLabel->text() != "PATH: ";
+    bool pathSelected = !inputPathLabel->text().isEmpty() && inputPathLabel->text() != IPATH;
 
     // Устанавливаем только цвет фона для активных кнопок
     QString activeStyle = "background-color: green; color: white;";
@@ -208,4 +223,13 @@ void Interface::updateButtonStyles()
     decompressButton->setStyleSheet(pathSelected ? activeStyle : defaultStyle);
     deleteButton->setStyleSheet(pathSelected ? activeStyle : defaultStyle);
     infoButton->setStyleSheet(defaultStyle); // Информация всегда доступна
+}
+
+
+void Interface::getInfo()
+{
+    std::string stat = adapter->getStat();
+    QString statQString = QString::fromStdString(stat);
+    QString message = "Last compression eff: " + statQString;
+    QMessageBox::information(nullptr, "Benchmark", message);
 }
