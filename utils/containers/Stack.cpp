@@ -1,5 +1,7 @@
 #include "Stack.h"
 
+#include "iostream"
+
 template <typename T>
 Stack<T>::Stack() : head(nullptr), stack_size(0) {}
 
@@ -32,6 +34,7 @@ void Stack<T>::pop()
 {
     if (!head)
     {
+        std::cout << "empty stack!\n";
         throw std::out_of_range("Empty stack!");
     }
     Node<T> *temp = head;
@@ -46,6 +49,7 @@ T &Stack<T>::top()
 {
     if (!head)
     {
+        std::cout << "empty stack!\n";
         throw std::out_of_range("Empty stack!");
     }
     return head->value;
@@ -57,6 +61,7 @@ const T &Stack<T>::top() const
 {
     if (!head)
     {
+        std::cout << "empty stack!\n";
         throw std::out_of_range("Empty stack!");
     }
     return head->value;

@@ -4,12 +4,11 @@
 #include "string"
 
 class IoPair {
-
 public:
     std::string input;
     std::string output;
-    IoPair(std::string in, std::string out) : input(std::move(in)), output(std::move(out)) {}
-
+    IoPair(std::string &in, std::string &out) : input(in), output(out) {}
 };
+
 
 #endif //COURSE_PROJECT_IOPAIR_H

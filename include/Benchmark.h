@@ -11,9 +11,12 @@ private:
     Stack<IoPair> IoStack;
 
 public:
-    void setValues(std::string input, std::string output);
+    void setValues(std::string &input, std::string &output);
     void removeValues();
+    void removeOutput();
     std::string getStat();
+    std::string getPrevStat();
+    IoPair getLastOperationPair();
 };
 
 #endif //COURSE_PROJECT_BENCHMARK_H

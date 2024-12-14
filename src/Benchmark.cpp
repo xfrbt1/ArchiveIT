@@ -1,11 +1,18 @@
 #include "Benchmark.h"
 
+#include "filesystem"
+#include "iostream"
 
-void Benchmark::setValues(std::string input, std::string output)
+#include "../utils/bytes_convertor.h"
+#include "../utils/file_operations.h"
+
+
+void Benchmark::setValues(std::string &input, std::string &output)
 {
-    IoPair pair{std::move(input), std::move(output)};
-    IoStack.push(std::move(pair));
+    IoPair pair{input, output};
+    IoStack.push(pair);
 }
+
 
 void Benchmark::removeValues()
 {
@@ -16,14 +23,16 @@ void Benchmark::removeValues()
     IoStack.pop();
 }
 
+
 std::string Benchmark::getStat()
 {
     if (IoStack.empty())
     {
-        return "Stack is empty.";
+        std::cout << "stack empty";
+        return "";
     }
 
-    std::string stat = "Stack contains:\n";
+    std::string stat = "contains:\n";
     size_t count = 0;
 
     Stack<IoPair> tempStack = IoStack;
@@ -35,7 +44,54 @@ std::string Benchmark::getStat()
         tempStack.pop();
         ++count;
     }
+    return "";
+}
 
-    stat += "Total items: " + std::to_string(count);
+
+std::string Benchmark::getPrevStat()
+{
+    std::string stat;
+    if (IoStack.empty())
+    {
+        return stat;
+    }
+
+    IoPair topPair = IoStack.top();
+
+    uintmax_t i = getFileSize(topPair.input);
+    uintmax_t o = getFileSize(topPair.output);
+
+    float result = static_cast<float>(i) / o;
+    std::cout << i << ", " << o << " = " << result << std::endl;
+    stat = std::to_string(result);
+
     return stat;
+}
+
+
+IoPair Benchmark::getLastOperationPair()
+{
+    if (IoStack.empty())
+    {
+//        throw std::exception;
+    }
+    return IoStack.top();
+}
+
+
+void Benchmark::removeOutput()
+{
+    Stack<IoPair> tempStack = IoStack;
+    while (!tempStack.empty())
+    {
+        if (std::filesystem::is_directory(tempStack.top().output))
+        {
+            std::filesystem::remove_all(tempStack.top().output);
+        }
+        else
+        {
+            std::filesystem::remove(tempStack.top().output);
+        }
+        tempStack.pop();
+    }
 }
