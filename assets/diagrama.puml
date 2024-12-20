@@ -8,18 +8,22 @@ class Interface {
     - QToolButton *decompressButton
     - QToolButton *deleteButton
     - QToolButton *infoButton
-    - QLabel *pathLabel
+    - QLabel *inputPathLabel
+    - QLabel *outputPathLabel
     - QLabel *algorithmMethodLabel
+
     - Adapter *adapter
 
     + Interface(Adapter *adapter, QWidget *parent = nullptr)
     + ~Interface()
+
     + void setupUI()
     + void setToolBarFont(QToolBar *toolBar)
     + void setupNavigationButtons()
     + void setupAlgorithmMenu()
     + void setupLabels()
     + void updateButtonStyles()
+    + void getInfo()
     + void selectPath()
     + void removePathObject()
     + void Compress()
@@ -28,32 +32,86 @@ class Interface {
 
 
 Interface --|> QMainWindow : inherits from
-Interface --> Adapter : depends on
+Interface *-- Adapter : composition
 
 
 class Adapter {
-    - Compressor * compressor
-    - Archiver * archiver
-    - FileManager * fileManager
-    - Benchmark * benchmark = nullptr
-    - Logger * logger = nullptr
 
-    + Adapter(FileManager *fm, Archiver *arch, Compressor *comp)
-    + ~Adapter()
+private:
+    Compressor *compressor;
+    Archiver *archiver;
+    FileManager *fileManager;
+    Benchmark *benchmark;
+    Logger *logger;
+
+public:
+    Adapter(FileManager *fm, Archiver *arch, Compressor *comp, Benchmark *bm, Logger *log)
+    + std::string getStat()
+    + std::string getLastOPath()
     + void updatePath(std::string &path)
     + void setCompressMethod(const std::string &compressMethod)
+    + void compress(const std::string &i, const std::string &o, const std::string &method)
     + void createArchive()
     + void unpackArchive()
     + void remove()
 }
 
+Adapter *-- FileManager : composition
+Adapter *-- Logger : composition
+Adapter *-- Benchmark : composition
+Adapter *-- Compressor : composition
+Adapter *-- Archiver : composition
 
-Adapter --> Compressor : depends on
-Adapter --> Archiver : depends on
-Adapter --> FileManager : depends on
-Adapter --> Logger : depends on
-Adapter --> Benchmark : depends on
 
+class Benchmark {
+
+private:
+    Stack<IoPair> IoStack;
+
+public:
+    + void setValues(std::string &input, std::string &output)
+    + void removeValues()
+    + void removeOutput()
+    + std::string getStat()
+    + std::string getPrevStat()
+    + IoPair getLastOperationPair()
+}
+
+Benchmark *-- Stack : composition
+Benchmark -->  IoPair: depends on
+
+class Stack<T> {
+    - Node<T> *head
+    - size_t stack_size
+
+    + Stack()
+    + ~Stack()
+    + void push(const T &value)
+    + void push(T &&value)
+    + void pop()
+    + T &top()
+    + const T &top() const
+    + bool empty() const
+    + size_t size() const
+    + void clear()
+}
+
+class Node<T> {
+    + T value
+    + Node *next
+
+    + Node(const T &val, Node *nxt = nullptr)
+    + Node(T &&val, Node *nxt = nullptr)
+}
+
+Stack *-- Node : composition
+
+class IoPair {
+    + std::string input
+    + std::string output
+
+    + IoPair(std::string &in, std::string &out)
+}
 
 class FileManager {
     - std::string currentPath
@@ -75,7 +133,6 @@ class FileManager {
     + void remove()
 }
 
-
 class Compressor {
     - std::string compressionMethod
 
@@ -91,7 +148,6 @@ class Compressor {
     + void decompressLZ78(const std::string &file_path)
 }
 
-
 class Archiver {
     - Compressor *compressor
 
@@ -100,8 +156,13 @@ class Archiver {
     + void decompressArchive(const std::string &archivePath)
 }
 
+Archiver *-- Compressor : composition
 
-Archiver --> Compressor : depends on
+
+class Logger {
+   + void printInfo(std::string &msg)
+   + void printError(std::string &msg)
+}
 
 
 @enduml
