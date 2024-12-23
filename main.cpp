@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
     Compressor *compressor = new Compressor();
     Archiver *archiver = new Archiver(compressor);
     Benchmark *benchmark = new Benchmark();
-    Adapter *adapter = new Adapter(fileManager, archiver, compressor, benchmark);
+    Logger *logger = new Logger();
+    Adapter *adapter = new Adapter(fileManager, archiver, compressor, benchmark, logger);
 
     QApplication app(argc, argv);
     Interface *interface  = new Interface(adapter);
