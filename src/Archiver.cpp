@@ -39,14 +39,10 @@ void Archiver::compressDirectory(const std::string &directoryPath, const std::st
                 {
                     std::string compressedFilePath = entry.path().string() + ".tmp";
 
-                    if (compressionMethod == "huff")
-                        compressor->compressHuffman(entry.path().string(), compressedFilePath);
-                    else if (compressionMethod == "lz77")
-                        compressor->compressLZ77(entry.path().string(), compressedFilePath);
-                    else if (compressionMethod == "lz78")
-                        compressor->compressLZ78(entry.path().string(), compressedFilePath);
+                    if (compressionMethod == "huff") compressor->compressHuffman(entry.path().string(), compressedFilePath);
+                    else if (compressionMethod == "lz77") compressor->compressLZ77(entry.path().string(), compressedFilePath);
+                    else if (compressionMethod == "lz78") compressor->compressLZ78(entry.path().string(), compressedFilePath);
 
-                    // Write compression method and compressed data
                     size_t methodLength = compressionMethod.size();
                     archiveFile.write(reinterpret_cast<const char *>(&methodLength), sizeof(methodLength));
                     archiveFile.write(compressionMethod.c_str(), methodLength);
@@ -56,11 +52,10 @@ void Archiver::compressDirectory(const std::string &directoryPath, const std::st
                     archiveFile.write(reinterpret_cast<const char *>(&dataSize), sizeof(dataSize));
                     archiveFile.write(compressedData.data(), dataSize);
 
-                    fs::remove(compressedFilePath); // Remove temporary file
+                    fs::remove(compressedFilePath);
                 }
                 else
                 {
-                    // Write uncompressed data for unsupported extensions
                     std::string fileData = readFile(entry.path().string());
                     size_t methodLength = 0;
                     archiveFile.write(reinterpret_cast<const char *>(&methodLength), sizeof(methodLength)); // No compression method
@@ -135,12 +130,9 @@ void Archiver::decompressArchive(const std::string &archivePath)
                 std::string tempCompressedFile = extractedFilePath + ".tmp";
                 writeFile(tempCompressedFile, compressedData);
 
-                if (compressionMethod == "huff")
-                    compressor->decompressHuffman(tempCompressedFile);
-                else if (compressionMethod == "lz77")
-                    compressor->decompressLZ77(tempCompressedFile);
-                else if (compressionMethod == "lz78")
-                    compressor->decompressLZ78(tempCompressedFile);
+                if (compressionMethod == "huff") compressor->decompressHuffman(tempCompressedFile);
+                else if (compressionMethod == "lz77") compressor->decompressLZ77(tempCompressedFile);
+                else if (compressionMethod == "lz78") compressor->decompressLZ78(tempCompressedFile);
 
                 fs::remove(tempCompressedFile);
             }

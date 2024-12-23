@@ -10,31 +10,36 @@
 
 
 #define BUFFER_SIZE 256
+#define WINDOW_SIZE 2048
 
 
 void Compressor::compressHuffman(const std::string &file_path, const std::string &output_path)
 {
     try
     {
-        std::string originalExtension = getExtension(file_path);
-
         std::string inputData = readFile(file_path);
+
         auto frequencyTable = buildFrequencyTable(inputData);
+
         auto huffmanTree = buildHuffmanTree(frequencyTable);
+
         auto huffmanCodes = generateHuffmanCodes(huffmanTree);
+
         std::string compressedData = compressData(inputData, huffmanCodes);
+
         std::ofstream outputFile(output_path, std::ios::binary);
-        if (!outputFile)
-        {
-            throw std::ios_base::failure("Failed to open output file.");
-        }
+
+        std::string originalExtension = getExtension(file_path);
         size_t extSize = originalExtension.size();
         outputFile.write(reinterpret_cast<const char*>(&extSize), sizeof(extSize));
         outputFile.write(originalExtension.data(), extSize);
 
         serializeFrequencyTable(outputFile, frequencyTable);
+
         serializeTree(outputFile, huffmanTree);
+
         writeBits(outputFile, compressedData);
+
         std::cout << "Compression successful. Compressed file written to " << output_path << std::endl;
     }
     catch (const std::exception &e)
@@ -87,61 +92,78 @@ void Compressor::compressLZ77(const std::string &file_path, const std::string &o
     try
     {
         std::string originalExtension = getExtension(file_path);
-
         std::string inputData = readFile(file_path);
+
+        // Вектор для хранения сжатых данных в формате (дистанция, длина, следующий символ)
         std::vector<std::tuple<size_t, size_t, char>> compressedData;
 
-        const size_t windowSize = 2048;
-        const size_t lookAheadBufferSize = BUFFER_SIZE;
+        const size_t windowSize = WINDOW_SIZE;               // Размер окна для поиска совпадений
+        const size_t lookAheadBufferSize = BUFFER_SIZE;      // Размер буфера предварительного просмотра
 
-        size_t i = 0;
-        while (i < inputData.size())
+        size_t i = 0; // Индекс текущего символа для обработки
+        while (i < inputData.size())  // Пока есть данные для обработки
         {
-            size_t matchLength = 0;
-            size_t matchDistance = 0;
-            size_t start = (i >= windowSize) ? (i - windowSize) : 0;
+            size_t matchLength = 0;  // Длина найденного совпадения
+            size_t matchDistance = 0; // Дистанция до найденного совпадения
+            size_t start = (i >= windowSize) ? (i - windowSize) : 0; // Начальная позиция для поиска совпадений
 
-            for (size_t j = start; j < i; ++j) {
-                size_t length = 0;
-                while (length < lookAheadBufferSize && i + length < inputData.size() &&
-                       inputData[j + length] == inputData[i + length]) {
-                    ++length;
+            // Цикл для поиска совпадений в предыдущем окне
+            for (size_t j = start; j < i; ++j)
+            {
+                size_t length = 0; // Длина текущего совпадения
+                // Исключаем условия для поиска максимального совпадения
+                while (length < lookAheadBufferSize && i + length < inputData.size() && inputData[j + length] == inputData[i + length])
+                {
+                    ++length; // Увеличиваем длину совпадения
                 }
 
-                if (length > matchLength) {
-                    matchLength = length;
-                    matchDistance = i - j;
+                // Если найденное совпадение длиннее предыдущих
+                if (length > matchLength)
+                {
+                    matchLength = length;  // Обновляем длину совпадения
+                    matchDistance = i - j; // Обновляем дистанцию до начала совпадения
                 }
             }
+
+            // Получаем следующий символ, который не входит в совпадение
             char nextChar = (i + matchLength < inputData.size()) ? inputData[i + matchLength] : '\0';
+            // Сохраняем найденные данные (дистанцию, длину и следующий символ)
             compressedData.push_back(std::make_tuple(matchDistance, matchLength, nextChar));
+            // Перемещаемся до следующего символа для обработки
             i += matchLength + 1;
         }
 
+        // Открываем выходной файл для записи в бинарном формате
         std::ofstream outputFile(output_path, std::ios::binary);
-        if (!outputFile)
+        if (!outputFile) // Проверяем на успешное открытие файла
         {
-            throw std::ios_base::failure("Failed to open output file.");
+            throw std::ios_base::failure("Failed to open output file."); // Генерируем исключение, если не удалось открыть файл
         }
 
+        // Записываем размер строки расширения
         size_t extSize = originalExtension.size();
-        outputFile.write(reinterpret_cast<const char*>(&extSize), sizeof(extSize));
-        outputFile.write(originalExtension.data(), extSize);
+        outputFile.write(reinterpret_cast<const char*>(&extSize), sizeof(extSize)); // Записываем размер
+        outputFile.write(originalExtension.data(), extSize); // Записываем само расширение
 
+        // Записываем сжатые данные
         for (const auto &entry : compressedData)
         {
             size_t distance, length;
             char literal;
-            std::tie(distance, length, literal) = entry;
+            std::tie(distance, length, literal) = entry; // Извлекаем значения из кортежа
 
+            // Записываем дистанцию, длину и символ в выходной файл
             outputFile.write(reinterpret_cast<const char*>(&distance), sizeof(distance));
             outputFile.write(reinterpret_cast<const char*>(&length), sizeof(length));
             outputFile.write(&literal, sizeof(literal));
         }
+
+        // Сообщение об успешной компрессии
         std::cout << "Compression successful. Compressed file written to " << output_path << std::endl;
     }
     catch (const std::exception &e)
     {
+        // Обработка ошибок: выводим сообщение об ошибке
         std::cerr << "Compression failed: " << e.what() << std::endl;
     }
 }
@@ -199,57 +221,74 @@ void Compressor::compressLZ78(const std::string &file_path, const std::string &o
 {
     try
     {
+        // Читаем содержимое входного файла в строку
         std::string inputData = readFile(file_path);
-        std::unordered_map<std::string, size_t> dictionary;
-        size_t dictionaryIndex = 1;
-        std::vector<std::pair<size_t, char>> compressedData;
-        std::string currentString;
 
+        // Словарь для хранения уникальных строк и их индексов
+        std::unordered_map<std::string, size_t> dictionary;
+        size_t dictionaryIndex = 1; // Индекс для новых записей в словаре
+        std::vector<std::pair<size_t, char>> compressedData; // Вектор для хранения сжатых данных (индекс, символ)
+        std::string currentString; // Строка для текущего символа или последовательности
+
+        // Проходим по каждому символу входных данных
         for (char c : inputData)
         {
-            currentString += c;
+            currentString += c; // Добавляем символ к текущей строке
 
+            // Проверяем, если текущая строка уже существует в словаре
             if (dictionary.find(currentString) == dictionary.end())
             {
-                size_t prefixIndex = 0;
-                if (currentString.size() > 1)
+                size_t prefixIndex = 0; // Индекс для префикса (предыдущей строки)
+                if (currentString.size() > 1) // Если длина текущей строки больше 1
                 {
+                    // Получаем индекс префикса, который на один символ короче текущей строки
                     prefixIndex = dictionary[currentString.substr(0, currentString.size() - 1)];
                 }
+
+                // Сохраняем вектор сжатых данных (индекс префикса и текущий символ)
                 compressedData.emplace_back(prefixIndex, c);
 
+                // Добавляем текущую строку в словарь с новым индексом
                 dictionary[currentString] = dictionaryIndex++;
-                currentString.clear();
+
+                currentString.clear(); // Очищаем текущую строку для продолжения
             }
         }
 
+        // Проверяем, остались ли необработанные символы в текущей строке
         if (!currentString.empty())
         {
+            // Получаем индекс префикса для текущей строки
             size_t prefixIndex = dictionary[currentString.substr(0, currentString.size() - 1)];
-            compressedData.emplace_back(prefixIndex, currentString.back());
+            compressedData.emplace_back(prefixIndex, currentString.back()); // Добавляем последний символ к сжатым данным
         }
 
+        // Открываем файл для записи сжатых данных в бинарном формате
         std::ofstream outputFile(output_path, std::ios::binary);
-        if (!outputFile)
+        if (!outputFile) // Проверяем на успешное открытие файла
         {
-            throw std::ios_base::failure("Failed to open output file.");
+            throw std::ios_base::failure("Failed to open output file."); // Генерируем исключение, если не удалось открыть файл
         }
 
+        // Получаем расширение оригинального файла
         std::string originalExtension = getExtension(file_path);
-        size_t extSize = originalExtension.size();
-        outputFile.write(reinterpret_cast<const char *>(&extSize), sizeof(extSize));
-        outputFile.write(originalExtension.data(), extSize);
+        size_t extSize = originalExtension.size(); // Размер расширения
+        outputFile.write(reinterpret_cast<const char *>(&extSize), sizeof(extSize)); // Записываем размер расширения
+        outputFile.write(originalExtension.data(), extSize); // Записываем само расширение
 
+        // Записываем сжатые данные в файл
         for (const auto &[prefixIndex, symbol] : compressedData)
         {
-            outputFile.write(reinterpret_cast<const char *>(&prefixIndex), sizeof(prefixIndex));
-            outputFile.write(&symbol, sizeof(symbol));
+            outputFile.write(reinterpret_cast<const char *>(&prefixIndex), sizeof(prefixIndex)); // Индекс префикса
+            outputFile.write(&symbol, sizeof(symbol)); // Текущий символ
         }
 
+        // Сообщение об успешной компрессии
         std::cout << "Compression successful. Compressed file written to " << output_path << std::endl;
     }
     catch (const std::exception &e)
     {
+        // Обработка ошибок: выводим сообщение об ошибке
         std::cerr << "Compression failed: " << e.what() << std::endl;
     }
 }
